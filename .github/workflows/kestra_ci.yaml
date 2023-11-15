@@ -1,0 +1,28 @@
+name: Kestra CI
+
+on:
+  push:
+    paths:
+      - '**.yaml'
+
+jobs:
+  validate_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Validate Kestra flows
+        uses: kestra-io/github-action-validate@v1
+        with:
+          url: http://localhost:8080
+          namespace: org.example
+          flows: '**/*.yaml'
+
+      - name: Deploy Kestra flows
+        uses: kestra-io/github-action-deploy@v1
+        with:
+          url: http://localhost:8080
+          namespace: org.example
+          flows: '**/*.yaml'
