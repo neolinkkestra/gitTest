@@ -1,0 +1,19 @@
+id: github-check
+namespace: org.example
+
+tasks:
+  - id: checkGithub
+    type: io.kestra.plugin.fs.http.Request
+    method: GET
+    uri: https://api.github.com/repos/neolinkkestra/gitTest/branches/main
+    headers:
+      Authorization: "Bearer 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"
+    
+  - id: logresult
+    type: io.kestra.core.tasks.log.Log
+    message: "Latest commit on branch main is {{ outputs.checkGithub.latestCommit }}"
+
+triggers:
+  - id: watch
+    type: io.kestra.core.models.triggers.types.Schedule
+    cron: "0 * * * *"
